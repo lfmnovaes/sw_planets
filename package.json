@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/lfmnovaes/sw_planets/issues"
   },
-  "homepage": "https://github.com/lfmnovaes/sw_planets#readme"
+  "homepage": "https://github.com/lfmnovaes/sw_planets#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }
