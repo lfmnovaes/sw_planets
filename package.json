@@ -1,0 +1,22 @@
+{
+  "name": "sw_planets",
+  "version": "1.0.0",
+  "description": "A Node.js RESTful API project with a list of Star Wars planets.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/lfmnovaes/sw_planets.git"
+  },
+  "keywords": [
+    "npm"
+  ],
+  "author": "Luis Fernando <lfmnovaes@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lfmnovaes/sw_planets/issues"
+  },
+  "homepage": "https://github.com/lfmnovaes/sw_planets#readme"
+}
