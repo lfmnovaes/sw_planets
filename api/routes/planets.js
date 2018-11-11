@@ -8,8 +8,14 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+    const planet = {
+        name: req.body.name,
+        climate: req.body.climate,
+        terrain: req.body.terrain
+    };
     res.status(201).json({
-        message: 'POST request to /planets'
+        message: 'POST request to /planets',
+        createdPlanet: planet
     });
 });
 
