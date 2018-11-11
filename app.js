@@ -2,8 +2,17 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const planetRoutes = require('./api/routes/planets');
+
+mongoose.connect('mongodb+srv://desafiog2w:' + 
+    process.env.MONGO_ATLAS_PW + 
+    '@swplanets-db-rldiw.mongodb.net/test?retryWrites=true', 
+    {
+        useNewUrlParser: true 
+    }
+);
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
