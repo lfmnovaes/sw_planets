@@ -13,6 +13,7 @@ mongoose.connect('mongodb+srv://desafiog2w:' +
         useNewUrlParser: true 
     }
 );
+mongoose.Promise = global.Promise;
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
