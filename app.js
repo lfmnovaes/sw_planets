@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const planetRoutes = require('./api/routes/planets');
 
-mongoose.connect('mongodb+srv://desafiog2w:' + 
+mongoose.connect('mongodb+srv://desafiob2w:' + 
     process.env.MONGO_ATLAS_PW + 
     '@swplanets-db-rldiw.mongodb.net/test?retryWrites=true', 
     {
