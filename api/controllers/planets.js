@@ -40,14 +40,14 @@ exports.planets_get_all = (req, res, next) => {
 };
 
 exports.planets_create_planet = (req, res, next) => {
-    var films = 0;
+    var films;
     var planet;
 
     // Synchonous method tentative
     
     request('GET', 'https://swapi.co/api/planets/?search=' + req.body.name).then((res) => {
         films = JSON.parse(res.getBody().toString()).results[0].films.length;
-        //console.log('first ' + films);
+        console.log('films: ' + films);
     }).done(planet = new Planet({
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,
@@ -77,6 +77,38 @@ exports.planets_create_planet = (req, res, next) => {
                     }
                 }
             });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+};
+
+exports.planets_get_all_by_name = (req, res, next) => {
+    const name = req.params.planetName;
+    Planet.find({'name' : new RegExp(name, 'i')})
+        .select('_id name climate terrain qtFilms')
+        .exec()
+        .then(docs => {
+            const response = {
+                count: docs.length,
+                planets: docs.map(doc => {
+                    return {
+                        _id: doc._id,
+                        name: doc.name,
+                        climate: doc.climate,
+                        terrain: doc.terrain,
+                        qtFilms: doc.qtFilms,
+                        request: {
+                            type: 'GET',
+                            url: 'http://localhost:3000/planets/' + doc._id
+                        }
+                    }
+                })
+            };
+            res.status(200).json(response);
         })
         .catch(err => {
             console.log(err);

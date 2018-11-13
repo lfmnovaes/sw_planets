@@ -5,7 +5,7 @@ const planetSchema = mongoose.Schema({
     name: { type: String, required: true },
     climate: { type: String, required: true },
     terrain: { type: String, required: true },
-    qtFilms: { type: Number, required: true }
+    qtFilms: { type: Number, required: true , default: 0 }
 });
 
 module.exports = mongoose.model('Planet', planetSchema);
