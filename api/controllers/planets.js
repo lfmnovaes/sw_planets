@@ -40,7 +40,7 @@ exports.planets_get_all = (req, res, next) => {
 };
 
 exports.planets_create_planet = (req, res, next) => {
-    var films;
+    var films = 0;
     var planet;
 
     // Synchonous method tentative
