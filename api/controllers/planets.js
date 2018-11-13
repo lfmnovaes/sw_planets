@@ -4,7 +4,7 @@ const request = require('then-request');
 
 exports.planets_get_all = (req, res, next) => {
     Planet.find()
-        .select('_id name climate terrain qtFilms')    
+        .select('_id name climate terrain qttFilm')    
         .exec()
         .then(docs => {
             const response = {
@@ -15,7 +15,7 @@ exports.planets_get_all = (req, res, next) => {
                         name: doc.name,
                         climate: doc.climate,
                         terrain: doc.terrain,
-                        qtFilms: doc.qtFilms,
+                        qttFilm: doc.qttFilm,
                         request: {
                             type: 'GET',
                             url: 'http://localhost:3000/planets/' + doc._id
@@ -43,7 +43,7 @@ exports.planets_create_planet = (req, res, next) => {
     var films;
     var planet;
 
-    // Synchonous method tentative
+    // Throws correctly into the console <<<NEED FIX>>>
     
     request('GET', 'https://swapi.co/api/planets/?search=' + req.body.name).then((res) => {
         films = JSON.parse(res.getBody().toString()).results[0].films.length;
@@ -53,10 +53,9 @@ exports.planets_create_planet = (req, res, next) => {
             name: req.body.name,
             climate: req.body.climate,
             terrain: req.body.terrain,
-            qtFilms: films
+            qttFilm: films
         })
     );
-    //console.log('and then ' + films);
 
     // Saving in the database using mongoose and throwing any error if found one
 
@@ -70,7 +69,7 @@ exports.planets_create_planet = (req, res, next) => {
                     name: result.name,
                     climate: result.climate,
                     terrain: result.terrain,
-                    qtFilms: result.qtFilms,
+                    qttFilm: result.qttFilm,
                     request: {
                         type: 'POST',
                         url: 'http://localhost:3000/planets/' + result._id
@@ -86,42 +85,10 @@ exports.planets_create_planet = (req, res, next) => {
         });
 };
 
-exports.planets_get_all_by_name = (req, res, next) => {
-    const name = req.params.planetName;
-    Planet.find({'name' : new RegExp(name, 'i')})
-        .select('_id name climate terrain qtFilms')
-        .exec()
-        .then(docs => {
-            const response = {
-                count: docs.length,
-                planets: docs.map(doc => {
-                    return {
-                        _id: doc._id,
-                        name: doc.name,
-                        climate: doc.climate,
-                        terrain: doc.terrain,
-                        qtFilms: doc.qtFilms,
-                        request: {
-                            type: 'GET',
-                            url: 'http://localhost:3000/planets/' + doc._id
-                        }
-                    }
-                })
-            };
-            res.status(200).json(response);
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
-};
-
 exports.planets_get_planet = (req, res, next) => {
     const id = req.params.planetId;
     Planet.findById(id)
-        .select('_id name climate terrain qtFilms')
+        .select('_id name climate terrain qttFilm')
         .exec()
         .then(doc => {
             console.log("From DB", doc);
@@ -140,6 +107,38 @@ exports.planets_get_planet = (req, res, next) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({error: err});
+        });
+};
+
+exports.planets_get_all_by_name = (req, res, next) => {
+    const name = req.params.planetsName;
+    Planet.find({'name' : new RegExp(name, 'i')})
+        .select('_id name climate terrain qttFilm')
+        .exec()
+        .then(docs => {
+            const response = {
+                count: docs.length,
+                planets: docs.map(doc => {
+                    return {
+                        _id: doc._id,
+                        name: doc.name,
+                        climate: doc.climate,
+                        terrain: doc.terrain,
+                        qttFilm: doc.qttFilm,
+                        request: {
+                            type: 'GET',
+                            url: 'http://localhost:3000/planets/n/' + doc.name
+                        }
+                    }
+                })
+            };
+            res.status(200).json(response);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
         });
 };
 
@@ -183,7 +182,7 @@ exports.planets_delete_planet = (req, res, next) => {
             request: {
                 type: 'POST',
                 url: 'http://localhost:3000/planets/',
-                body: { name: 'String', climate: 'String', terrain: 'String', qtFilms: 'Number' }
+                body: { name: 'String', climate: 'String', terrain: 'String', qttFilm: 'Number' }
             }
         });
     })

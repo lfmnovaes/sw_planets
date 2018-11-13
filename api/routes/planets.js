@@ -9,9 +9,9 @@ router.get('/', PlanetsController.planets_get_all);
 
 router.post('/', PlanetsController.planets_create_planet);
 
-router.get('/:planetName', PlanetsController.planets_get_all_by_name);
-
 router.get('/:planetId', PlanetsController.planets_get_planet);
+
+router.get('/n/:planetsName', PlanetsController.planets_get_all_by_name);
 
 router.patch('/:planetId', PlanetsController.planets_update_planet);
 
