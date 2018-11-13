@@ -1,5 +1,6 @@
 const Planet = require('../models/planet');
 const mongoose = require('mongoose');
+const request = require('then-request');
 
 exports.planets_get_all = (req, res, next) => {
     Planet.find()
@@ -39,14 +40,24 @@ exports.planets_get_all = (req, res, next) => {
 };
 
 exports.planets_create_planet = (req, res, next) => {
-    const planet = new Planet({
-        _id: new mongoose.Types.ObjectId(),
-        name: req.body.name,
-        climate: req.body.climate,
-        terrain: req.body.terrain,
-        qtFilms: req.body.qtFilms
-    });
+    var films;
+    var planet;
+
+    // Synchonous method tentative
     
+    request('GET', 'https://swapi.co/api/planets/?search=' + req.body.name).then((res) => {
+        films = JSON.parse(res.getBody().toString()).results[0].films.length;
+        //console.log('first ' + films);
+    }).done(planet = new Planet({
+            _id: new mongoose.Types.ObjectId(),
+            name: req.body.name,
+            climate: req.body.climate,
+            terrain: req.body.terrain,
+            qtFilms: films
+        })
+    );
+    //console.log('and then ' + films);
+
     // Saving in the database using mongoose and throwing any error if found one
 
     planet.save()
@@ -59,6 +70,7 @@ exports.planets_create_planet = (req, res, next) => {
                     name: result.name,
                     climate: result.climate,
                     terrain: result.terrain,
+                    qtFilms: result.qtFilms,
                     request: {
                         type: 'POST',
                         url: 'http://localhost:3000/planets/' + result._id
@@ -113,7 +125,7 @@ exports.planets_update_planet = (req, res, next) => {
         .exec()
         .then(result => {
             res.status(200).json({
-                message: 'planet updated',
+                message: 'Planet updated',
                 request: {
                     type: 'GET',
                     url: 'http://localhost:3000/planets/' + id
@@ -135,7 +147,7 @@ exports.planets_delete_planet = (req, res, next) => {
     .exec()
     .then(result => {
         res.status(200).json({
-            message: 'Product deleted',
+            message: 'Planet deleted',
             request: {
                 type: 'POST',
                 url: 'http://localhost:3000/planets/',
